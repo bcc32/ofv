@@ -25,3 +25,13 @@ module Entry = struct
     { filename
     ; crc32 = Crc.of_string crc_string }
 end
+
+let is_comment line = String.is_prefix line ~prefix:";"
+
+let iter_entries chan ~f =
+  In_channel.iter_lines chan ~f:(fun line ->
+    if not (is_comment line)
+    then (
+      let entry = Entry.of_string line in
+      f entry))
+;;

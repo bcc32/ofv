@@ -9,11 +9,8 @@ let sfv_file =
 
 let main sfv_file =
   In_channel.with_file sfv_file ~f:(fun file ->
-    In_channel.iter_lines file ~f:(fun line ->
-      if not (String.is_prefix line ~prefix:";")
-      then (
-        let sfv = Sfv.Entry.of_string line in
-        Debug.eprint_s [%sexp (sfv : Sfv.Entry.t)])))
+    Sfv.iter_entries file ~f:(fun entry ->
+      Debug.eprint_s [%sexp (entry : Sfv.Entry.t)]))
 ;;
 
 let () = Term.(exit @@ eval (pure main $ sfv_file, info "ofv"))
