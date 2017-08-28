@@ -1,0 +1,7 @@
+#+TITLE: ofv (OCaml File Verifier)
+
+* Introduction
+
+  =ofv= is a light-weight, cross-platform SFV
+  ([https://en.wikipedia.org/wiki/Simple_file_verification][Simple File
+  Verification]) checker written in OCaml.
