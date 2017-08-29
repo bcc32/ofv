@@ -28,6 +28,7 @@ module Entry = struct
 
   let check { filename; crc32 = expected } =
     match Crc.file filename with
+    | Error _ as e -> e
     | Ok actual ->
       if Crc.equal expected actual
       then Ok ()
@@ -36,7 +37,6 @@ module Entry = struct
                                      (filename : string)
                                      (expected : Crc.t)
                                      (actual : Crc.t)])
-    | Error _ as e -> e
   ;;
 end
 
