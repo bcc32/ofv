@@ -4,3 +4,23 @@
 
   =ofv= is a light-weight, cross-platform SFV ([[https://en.wikipedia.org/wiki/Simple_file_verification][Simple File Verification]]) checker
   written in OCaml.
+
+* Usage
+
+  #+BEGIN_EXAMPLE
+    NAME
+           ofv
+
+    SYNOPSIS
+           ofv [OPTION]... sfv-file
+
+    OPTIONS
+           --help[=FMT] (default=auto)
+               Show this help in format FMT. The value FMT must be one of `auto',
+               `pager', `groff' or `plain'. With `auto', the format is `pager` or
+               `plain' whenever the TERM env var is `dumb' or undefined.
+
+           -q, --quiet
+               Don't print OK for each successfully verified file.
+
+  #+END_EXAMPLE
