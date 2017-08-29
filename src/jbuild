@@ -4,5 +4,4 @@
  ((name ofv_lib)
   (libraries (core_kernel))
   (c_names (crc_stubs))
-  (c_flags (-I${ocaml_where}))
   (preprocess (pps (ppx_jane)))))
