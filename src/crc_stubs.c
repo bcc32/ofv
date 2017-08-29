@@ -9,7 +9,7 @@
 // Based on Gary S. Brown's code
 // https://opensource.apple.com/source/xnu/xnu-1456.1.26/bsd/libkern/crc32.c
 
-static uint32_t crc32_tab[] = {
+static uint32_t crc32_table[] = {
   0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
   0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988,
   0x09b64c2b, 0x7eb17cbd, 0xe7b82d07, 0x90bf1d91, 0x1db71064, 0x6ab020f2,
@@ -55,15 +55,13 @@ static uint32_t crc32_tab[] = {
   0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d
 };
 
-uint32_t crc32(uint32_t crc, const void *buf, size_t size)
+uint32_t crc32(uint32_t crc, const uint8_t *buf, size_t size)
 {
-  const uint8_t *p;
+  crc ^= ~0U;
 
-  p = buf;
-  crc = crc ^ ~0U;
-
-  while (size--)
-    crc = crc32_tab[(crc ^ *p++) & 0xFF] ^ (crc >> 8);
+  for (size_t i = 0; i < size; i++) {
+    crc = crc32_table[(crc ^ buf[i]) & 0xFF] ^ (crc >> 8);
+  }
 
   return crc ^ ~0U;
 }
@@ -71,7 +69,7 @@ uint32_t crc32(uint32_t crc, const void *buf, size_t size)
 value caml_crc32_add_string(value crc, value str, value pos, value len)
 {
   CAMLparam4(crc, str, pos, len);
-  char *p = String_val(str) + Long_val(pos);
+  uint8_t *p = &Byte_u(str, Long_val(pos));
   uint32_t new_crc = crc32(Int32_val(crc), p, Long_val(len));
   CAMLreturn(caml_copy_int32(new_crc));
 }
