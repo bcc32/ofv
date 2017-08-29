@@ -17,15 +17,15 @@ let main sfv_file =
       match Sfv.Entry.check entry with
       | `Ok ->
         incr count_ok;
-        printf "%s: OK\n" entry.filename
+        printf "%s: OK\n%!" entry.filename
       | `Mismatch actual ->
         incr count_mismatch;
-        printf !"%s: NOT OK, expected %{Crc} but got %{Crc}\n"
+        printf !"%s: NOT OK, expected %{Crc} but got %{Crc}\n%!"
           entry.filename entry.crc32 actual
       | `Read_error e ->
         incr count_error;
-        printf !"%s: %{Error#mach}\n" entry.filename e));
-  printf "%d OK, %d mismatches, %d errors\n"
+        printf !"%s: %{Error#mach}\n%!" entry.filename e));
+  printf "%d OK, %d mismatches, %d errors\n%!"
     !count_ok !count_mismatch !count_error
 ;;
 
