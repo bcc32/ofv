@@ -73,9 +73,9 @@ let file filename =
   Or_error.try_with (fun () ->
     In_channel.with_file filename ~f:(fun chan ->
       let rec loop crc =
-        let len = In_channel.input chan ~buf ~pos:0 ~len:block_size in
-        let crc = add_string crc buf ~pos:0 ~len in
-        loop crc
+        match In_channel.input chan ~buf ~pos:0 ~len:block_size with
+        | 0 -> crc
+        | len -> loop @@ add_string crc buf ~pos:0 ~len
       in
       loop 0l))
 ;;
