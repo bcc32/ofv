@@ -24,6 +24,7 @@ module Entry = struct
     let filename = String.strip filename in
     { filename
     ; crc32 = Crc.of_string crc_string }
+  ;;
 end
 
 let is_comment line = String.is_prefix line ~prefix:";"
