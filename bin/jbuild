@@ -3,5 +3,7 @@
 (executables
  ((names        (main))
   (public_names (ofv))
-  (libraries (core_kernel cmdliner))
+  (libraries (core_kernel
+              cmdliner
+              ofv_lib))
   (preprocess (pps (ppx_jane)))))
