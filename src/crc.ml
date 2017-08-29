@@ -1,6 +1,8 @@
 open! Core_kernel
 
-type t = int32                  (* TODO consider changing type *)
+type t = int32
+
+let equal = Int32.equal
 
 let to_string t = sprintf "%08lX" t
 
@@ -62,4 +64,18 @@ let bigstring ?pos ?len s =
   let pos = opt_pos pos in
   let len = opt_len pos (Bigstring.length s) len in
   add_bigstring 0l s ~pos ~len
+;;
+
+let block_size = 4096
+
+let file filename =
+  let buf = String.create block_size in
+  Or_error.try_with (fun () ->
+    In_channel.with_file filename ~f:(fun chan ->
+      let rec loop crc =
+        let len = In_channel.input chan ~buf ~pos:0 ~len:block_size in
+        let crc = add_string crc buf ~pos:0 ~len in
+        loop crc
+      in
+      loop 0l))
 ;;

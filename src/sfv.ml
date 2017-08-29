@@ -25,6 +25,19 @@ module Entry = struct
     { filename
     ; crc32 = Crc.of_string crc_string }
   ;;
+
+  let check { filename; crc32 = expected } =
+    match Crc.file filename with
+    | Ok actual ->
+      if Crc.equal expected actual
+      then Ok ()
+      else (
+        Or_error.error_s [%message "mismatched CRC"
+                                     (filename : string)
+                                     (expected : Crc.t)
+                                     (actual : Crc.t)])
+    | Error _ as e -> e
+  ;;
 end
 
 let is_comment line = String.is_prefix line ~prefix:";"
