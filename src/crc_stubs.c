@@ -1,6 +1,7 @@
 #include <stdint.h>
 
 #include <caml/alloc.h>
+#include <caml/bigarray.h>
 #include <caml/callback.h>
 #include <caml/memory.h>
 #include <caml/mlvalues.h>
@@ -71,14 +72,14 @@ value caml_crc32_add_string(value crc, value str, value pos, value len)
 {
   CAMLparam4(crc, str, pos, len);
   char *p = String_val(str) + Long_val(pos);
-  uint32_t crc = crc32(Int32_val(crc), p, Long_val(len));
-  CAMLreturn(caml_copy_int32(crc));
+  uint32_t new_crc = crc32(Int32_val(crc), p, Long_val(len));
+  CAMLreturn(caml_copy_int32(new_crc));
 }
 
 value caml_crc32_add_bigstring(value crc, value str, value pos, value len)
 {
   CAMLparam4(crc, str, pos, len);
   uint8_t *p = (uint8_t *)Caml_ba_data_val(str) + Long_val(pos);
-  uint32_t crc = crc32(Int32_val(crc), p, Long_val(len));
-  CAMLreturn(caml_copy_int32(crc));
+  uint32_t new_crc = crc32(Int32_val(crc), p, Long_val(len));
+  CAMLreturn(caml_copy_int32(new_crc));
 }
