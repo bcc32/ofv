@@ -8,7 +8,12 @@ let sfv_file =
   Arg.(required & pos 0 (some string) None & info [] ~docv)
 ;;
 
-let main sfv_file =
+let quiet =
+  let doc = "Don't print OK for each successfully verified file." in
+  Arg.(value & flag & info ["q"; "quiet"] ~doc)
+;;
+
+let main sfv_file quiet =
   let count_ok       = ref 0 in
   let count_mismatch = ref 0 in
   let count_error    = ref 0 in
@@ -17,7 +22,7 @@ let main sfv_file =
       match Sfv.Entry.check entry with
       | `Ok ->
         incr count_ok;
-        printf "%s: OK\n%!" entry.filename
+        if not quiet then (printf "%s: OK\n%!" entry.filename)
       | `Mismatch actual ->
         incr count_mismatch;
         printf !"%s: NOT OK, expected %{Crc} but got %{Crc}\n%!"
@@ -29,4 +34,4 @@ let main sfv_file =
     !count_ok !count_mismatch !count_error
 ;;
 
-let () = Term.(exit @@ eval (pure main $ sfv_file, info "ofv"))
+let () = Term.(exit @@ eval (pure main $ sfv_file $ quiet, info "ofv"))
