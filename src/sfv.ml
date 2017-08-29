@@ -28,15 +28,11 @@ module Entry = struct
 
   let check { filename; crc32 = expected } =
     match Crc.file filename with
-    | Error _ as e -> e
+    | Error err -> `Read_error err
     | Ok actual ->
       if Crc.equal expected actual
-      then Ok ()
-      else (
-        Or_error.error_s [%message "mismatched CRC"
-                                     (filename : string)
-                                     (expected : Crc.t)
-                                     (actual : Crc.t)])
+      then `Ok
+      else (`Mismatch actual)
   ;;
 end
 
