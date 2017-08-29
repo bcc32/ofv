@@ -67,9 +67,18 @@ uint32_t crc32(uint32_t crc, const void *buf, size_t size)
   return crc ^ ~0U;
 }
 
-value caml_crc32_string(value str, value pos, value len)
+value caml_crc32_add_string(value crc, value str, value pos, value len)
 {
-  CAMLparam3(str, pos, len);
-  uint32_t crc = crc32(0, String_val(str) + Int_val(pos), Int_val(len));
+  CAMLparam4(crc, str, pos, len);
+  char *p = String_val(str) + Long_val(pos);
+  uint32_t crc = crc32(Int32_val(crc), p, Long_val(len));
+  CAMLreturn(caml_copy_int32(crc));
+}
+
+value caml_crc32_add_bigstring(value crc, value str, value pos, value len)
+{
+  CAMLparam4(crc, str, pos, len);
+  uint8_t *p = (uint8_t *)Caml_ba_data_val(str) + Long_val(pos);
+  uint32_t crc = crc32(Int32_val(crc), p, Long_val(len));
   CAMLreturn(caml_copy_int32(crc));
 }
