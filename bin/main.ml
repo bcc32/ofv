@@ -32,11 +32,9 @@ let main sfv_file quiet =
         printf !"%s: %{Error#mach}\n%!" entry.filename e));
   printf "%d OK, %d mismatches, %d errors\n%!"
     !count_ok !count_mismatch !count_error;
-  if !count_mismatch = 0 && !count_error = 0
-  then (`Ok ())
-  else (
-    let bad = !count_mismatch + !count_error in
-    `Error (false, sprintf "%d files were not successfully verified" bad))
+  match !count_mismatch + !count_error with
+  | 0 -> `Ok ()
+  | bad -> `Error (false, sprintf "%d files were not successfully verified" bad)
 ;;
 
 let () = Term.(exit @@ eval (ret (pure main $ sfv_file $ quiet), info "ofv"))
