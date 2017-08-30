@@ -4,7 +4,7 @@ open! Ofv_lib
 open Cmdliner
 
 let sfv_file =
-  let docv = "sfv-file" in
+  let docv = "SFV-FILE" in
   Arg.(required & pos 0 (some string) None & info [] ~docv)
 ;;
 
