@@ -37,8 +37,10 @@ let main sfv_file quiet =
   | bad -> `Error (false, sprintf "%d files were not successfully verified" bad)
 ;;
 
+let version = "0.1.0"
+
 let () =
   let term = Term.(ret (pure main $ sfv_file $ quiet)) in
-  let info = Term.info "ofv" in
+  let info = Term.info "ofv" ~version in
   Term.exit (Term.eval (term, info))
 ;;
